@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/tool"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tool http://www.springframework.org/schema/tool/spring-tool.xsd">
+
+    <!--开启注解扫描,希望处理service和dao， controller不需要spring框架去处理-->
+    <context:component-scan base-package="com.liujiajun">
+        <!--配置哪些注解不扫描-->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:exclude-filter>
+    </context:component-scan>
+
+
+
+    <context:property-placeholder location="classpath:jdbcConfig.properties"></context:property-placeholder>
+    <!--配置druid连接池对象-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"></property>
+        <property name="url" value="${jdbc.url}"></property>
+        <property name="username" value="${jdbc.username}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+    <!--1、配置C3P0的连接池对象-->
+    <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+    <!--<property name="driverClass" value="${jdbc.driver}"></property>-->
+    <!--<property name="jdbcUrl" value="${jdbc.url}"></property>-->
+    <!--<property name="user" value="${jdbc.username}"></property>-->
+    <!--<property name="password" value="${jdbc.password}"></property>-->
+    <!--</bean>-->
+
+    <!--2、配置SqlSession工厂-->
+    <bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+
+        <!-- 传入PageHelper的插件 -->
+        <property name="plugins">
+            <array>
+                <!-- 传入插件的对象 -->
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <props>
+                            <prop key="helperDialect">mysql</prop>
+                            <prop key="reasonable">true</prop>
+                        </props>
+                    </property>
+                </bean>
+            </array>
+        </property>
+
+        <!--
+        管理 mybatis 的映射配置文件，该属性可管理多个配置文件
+        name：表示该标签是管理 mybatis 的映射配置文件
+        value：表示在类路径下需要管理的 mybatis 的映射配置文件
+        -->
+        <property name="mapperLocations" value="classpath:com/liujiajun/mapper/*.xml"></property>
+        <!--
+        在包的前提下为数据 bean 取别名
+        name：表示是基于包为数据 bean 取别名
+        value：表示为哪个包下取别名
+        -->
+        <property name="typeAliasesPackage" value="com.liujiajun.po"></property>
+    </bean>
+
+    <!--3、配置扫描dao的包-->
+    <bean id="mapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.liujiajun.dao"></property>
+    </bean>
+
+
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--如果需要扫描多个报下的mapper,每个包中间使用半角逗号分开-->
+        <property name="basePackage" value="com.liujiajun.mapper" />
+        <property name="sqlSessionFactoryBeanName" value="sessionFactory" />
+    </bean>
+
+
+    <!--配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!--配置事务通知-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!--<tx:method name="*" read-only="false" propagation="REQUIRED"/>-->
+            <!--<tx:method name="find*" read-only="true" propagation="SUPPORTS"></tx:method>-->
+            <tx:method name="save*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="insert*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+            <tx:method name="select*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!--配置切入点-->
+    <aop:config>
+        <aop:pointcut id="pt1" expression="execution(* com.liujiajun.service.impl.*.*(..))"></aop:pointcut>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pt1"></aop:advisor>
+        <aop:aspect ref="logAop">
+            <aop:before method="doBefore" pointcut-ref="pt1"></aop:before>
+            <aop:after method="doAfter" pointcut-ref="pt1"></aop:after>
+        </aop:aspect>
+    </aop:config>
+
+
+</beans>

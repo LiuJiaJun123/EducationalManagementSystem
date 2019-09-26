@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 配置创建 spring 容器要扫描的包 -->
+    <context:component-scan base-package="com.liujiajun.controller"></context:component-scan>
+
+    <!--配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+
+    <!--使用annotation-driven 注解驱动,开启注解支持，就可以代替 注解映射器 和 注解适配器 的配置-->
+    <!--conversion-service 向处理器适配器中注入【自定义的参数绑定组件】。-->
+    <!--validator 向处理器适配器，注入 校验器-->
+    <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+
+    <!--自定义参数绑定组件-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <!-- 转换器 -->
+        <property name="converters">
+            <set>
+                <!-- 日期类型转换 -->
+                <bean class="com.liujiajun.controller.converter.CustomDateConverter"/>
+            </set>
+        </property>
+    </bean>
+
+    <!--全局错误信息处理器
+      只要实现HandlerExceptionResolver接口就是全局异常处理器
+      -->
+    <bean class="com.liujiajun.exception.CustomExceptionResolver"/>
+
+
+
+    <!--加载静态资源-->
+    <mvc:default-servlet-handler/>
+
+    <!-- 设置静态资源不过滤 -->
+    <!--<mvc:resources location="/css/" mapping="/css/**" />-->
+    <!--<mvc:resources location="/fonts/" mapping="/fonts/**" />-->
+    <!--<mvc:resources location="/images/" mapping="/images/**" />-->
+    <!--<mvc:resources location="/js/" mapping="/js/**" />-->
+
+
+</beans>
