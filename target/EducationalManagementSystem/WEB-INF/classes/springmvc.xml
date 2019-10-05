@@ -20,12 +20,10 @@ http://www.springframework.org/schema/context/spring-context.xsd">
     </bean>
 
 
-    <!--使用annotation-driven 注解驱动,开启注解支持，就可以代替 注解映射器 和 注解适配器 的配置-->
-    <!--conversion-service 向处理器适配器中注入【自定义的参数绑定组件】。-->
-    <!--validator 向处理器适配器，注入 校验器-->
-    <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
 
-    <!--自定义参数绑定组件-->
+
+    <!--第一步，写一个类型转换类（com.liujiajun.controller.converter.CustomDateConverter）-->
+    <!--第二步：配置类型转换器-->
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <!-- 转换器 -->
         <property name="converters">
@@ -35,6 +33,9 @@ http://www.springframework.org/schema/context/spring-context.xsd">
             </set>
         </property>
     </bean>
+    <!--第三步：在annotation-driven标签中引用配置的类型转换服务-->
+    <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+
 
     <!--全局错误信息处理器
       只要实现HandlerExceptionResolver接口就是全局异常处理器

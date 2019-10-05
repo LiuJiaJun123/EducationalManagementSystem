@@ -21,6 +21,15 @@ ORM框架：Mybatis
 
 前端框架：Bootstrap
 
+
+# 在线预览
+[http://23188i98c9.51mypc.cn:28070](http://23188i98c9.51mypc.cn:28070)
+* 登录账户
+  * 管理员账户：admin
+  * 老师账户：1001
+  * 学生账户：10001
+  * 密码均为：123
+
 # 快速上手
 ### 1、运行环境和所需工具
 * 编译器：IntelliJ IDEA
@@ -36,11 +45,6 @@ ORM框架：Mybatis
 * 在 IntelliJ IDEA 中，配置我们的 Tomcat， 然后把使用Maven构建好的项目添加到Tomcat中。
 * 运行
 ![login](png/login.png)
-* 登录账户
-  * 管理员账户：admin
-  * 老师账户：1001
-  * 学生账户：10001
-  * 密码均为：123
 
 # 功能模块介绍
 ### 1、登录模块功能

@@ -62,12 +62,6 @@
         <!-- <property name="sessionMode" value="native"/> -->
     </bean>
 
-    <!-- 自定义Realm -->
-    <!--<bean id="loginRealm" class="com.liujiajun.realm.LoginRealm">-->
-        <!--&lt;!&ndash; 定义凭证匹配器 &ndash;&gt;-->
-        <!--&lt;!&ndash;<property name="credentialsMatcher" ref="credentialsMatcher"></property>&ndash;&gt;-->
-    <!--</bean>-->
-
     <!-- 生命周期 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
 
