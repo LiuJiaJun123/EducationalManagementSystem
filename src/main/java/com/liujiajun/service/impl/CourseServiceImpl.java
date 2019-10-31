@@ -115,7 +115,7 @@ public class CourseServiceImpl implements CourseService {
                 CourseCustom courseCustom = new CourseCustom();
                 //类拷贝
                 BeanUtils.copyProperties(courseCustom, c);
-                //获取课程名
+                //获取院系名
                 College college = collegeMapper.selectByPrimaryKey(c.getCollegeid());
                 courseCustom.setcollegeName(college.getCollegename());
 

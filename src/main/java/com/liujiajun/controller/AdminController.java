@@ -350,11 +350,11 @@ public class AdminController {
         Integer userid=checkUserId.getUserid();
         CourseCustom courseCustom = courseService.findById(userid);
         if(courseCustom!=null){
-            //学号已经存在
+            //课程号已经存在
             checkUserId.setFlag(false);
             checkUserId.setErrorMsg("该课程号已经存在，请重新输入！");
         } else {
-            //学号不存在，可以添加
+            //课程号不存在，可以添加
             checkUserId.setFlag(true);
             checkUserId.setErrorMsg("");
         }

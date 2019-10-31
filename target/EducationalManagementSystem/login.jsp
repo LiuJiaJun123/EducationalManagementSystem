@@ -32,7 +32,7 @@
 				  <div class="form-group">
 				    <label for="userID" class="col-sm-3 control-label">用户id</label>
 				    <div class="col-sm-9">
-				      <input type="text" class="form-control" id="userID" placeholder="请输入名字" name="username">
+				      <input type="text" class="form-control" id="userID" placeholder="请输入id" name="username">
 				    </div>
 				  </div>
 				  <div class="form-group">

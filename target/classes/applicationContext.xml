@@ -20,7 +20,7 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"></context:exclude-filter>
     </context:component-scan>
 
-
+    
 
     <context:property-placeholder location="classpath:jdbcConfig.properties"></context:property-placeholder>
     <!--配置druid连接池对象-->
