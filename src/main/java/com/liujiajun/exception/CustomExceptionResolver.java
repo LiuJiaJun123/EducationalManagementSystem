@@ -42,8 +42,6 @@ public class CustomExceptionResolver implements HandlerExceptionResolver {
         //错误信息
         String message = customException.getMessage();
 
-
-
         //错误信息传递和错误页面跳转
         modelAndView.addObject("message", message);
         modelAndView.setViewName("error");

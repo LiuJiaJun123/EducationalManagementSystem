@@ -25,29 +25,27 @@
 
         <property name="filterChainDefinitions">
             <value>
-                #这里相当于ini配置文件中的[urls]
-                #url=拦截器[参数]，拦截器
-                # /techer/** = authc, perms[document:read]
-                # 如果用户没有该角色，然后访问该 路径 会报 401错误
+                <!--需要注意filterChainDefinitions过滤器中对于路径的配置是有顺序的，当找到匹配的条目之后容器不会再继续寻找。因此带有通配符的路径要放在后面-->
 
+                <!-- 如果用户没有该角色，然后访问该 路径 会报 401错误-->
                 /admin/** = authc, roles[admin]
                 /teacher/** = authc, roles[teacher]
                 /student/** = authc, roles[student]
 
-                # 当访问login时，不用进行认证（anon表示匿名）
+                <!-- 当访问login（LoginController中的登录处理方法）时，不用进行认证（anon表示匿名）-->
                 /login = anon
 
+                <!--退出登录-->
                 /logout = logout
 
-                # 配置静态资源可以匿名访问
+                <!-- 配置静态资源可以匿名访问-->
                 /css/** = anon
                 /js/** = anon
                 /images/** = anon
                 /fonts/** = anon
 
-                # 除了上面的 /login 可以匿名访问，其他路径都需要登录访问
-                # 如果没登录，就访问其他路径会跳转到 /login 登录
-
+                <!-- 除了上面的 /login 可以匿名访问，其他路径都需要登录访问-->
+                <!-- 如果没登录，就访问其他路径会跳转到 /login 登录-->
                 /** = authc
             </value>
         </property>

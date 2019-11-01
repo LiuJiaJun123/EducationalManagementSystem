@@ -24,11 +24,15 @@ public class LoginController {
         //Shiro实现登录
         UsernamePasswordToken token = new UsernamePasswordToken(userlogin.getUsername(),
                 userlogin.getPassword());
+
+        // 获取Subject单例对象
         Subject subject = SecurityUtils.getSubject();
 
         //如果获取不到用户名就是登录失败，但登录失败的话，会直接抛出异常
+        //调用login(token)方法时会调用LoginRealm中的doGetAuthenticationInfo方法
         subject.login(token);
 
+        //当调用subject.hasRole()方法时，就会执行LoginRealm中的doGetAuthorizationInfo方法
         if (subject.hasRole("admin")) {
             return "redirect:/admin/showStudent";
         } else if (subject.hasRole("teacher")) {

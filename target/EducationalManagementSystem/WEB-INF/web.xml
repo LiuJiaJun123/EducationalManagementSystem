@@ -14,6 +14,7 @@
   <!--自定义要加载的配置文件路径-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
+    <!-- 将配置文件交给Spring监听器初始化 -->
     <param-value>classpath:applicationContext.xml,classpath:spring-shiro.xml</param-value>
   </context-param>
 

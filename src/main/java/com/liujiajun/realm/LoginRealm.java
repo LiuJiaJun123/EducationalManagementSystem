@@ -63,6 +63,7 @@ public class LoginRealm extends AuthorizingRealm{
         //密码
         String password = new String((char[])token.getCredentials());
 
+
         Userlogin userlogin = null;
         try {
             userlogin = userloginService.findByName(username);
